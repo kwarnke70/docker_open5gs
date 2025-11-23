@@ -37,9 +37,13 @@ uacAcc:
   class15: false
 
 # Initial PDU sessions to be established
+  # - type: 'IPv4'
+  #   apn: 'internet'
+  #   slice:
+  #     sst: 1
 sessions:
   - type: 'IPv4'
-    apn: 'internet'
+    apn: 'ims'
     slice:
       sst: 1
 

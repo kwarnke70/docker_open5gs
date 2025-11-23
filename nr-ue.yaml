@@ -1,6 +1,6 @@
 services:
   nr_ue:
-    image: docker_ueransim
+    image:  docker_ueransim # nr_ue-twinkle # 
     container_name: nr_ue
     stdin_open: true
     tty: true
@@ -8,6 +8,7 @@ services:
       - ./ueransim:/mnt/ueransim
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      - ./twinkle:/root/.twinkle
     env_file:
       - .env
     environment:

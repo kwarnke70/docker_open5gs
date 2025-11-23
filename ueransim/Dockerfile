@@ -44,13 +44,38 @@ RUN apt-get update && \
         iputils-ping \
         wget \
         libssl-dev \
-        cmake
+        cmake \
+	libxml2-dev \
+	libmagic-dev \
+	libsndfile1-dev \
+	libreadline-dev \
+	bison \
+	flex \
+	libucommon-dev \
+	libccrtp-dev
 
 # Clone and build UERANSIM
 RUN git clone https://github.com/aligungr/UERANSIM && \
     cd UERANSIM && git checkout tags/v3.2.6 && \
     make -j`nproc`
 
+# Clone and build twinkle
+RUN git clone https://github.com/kwarnke70/twinkle.git && \
+    cd twinkle && git checkout cg && \
+    mkdir build && cd build && \
+    cmake .. \
+    -DWITH_AKONADI=OFF \
+    -DWITH_ALSA=OFF \
+    -DWITH_DBUS=OFF \
+    -DWITH_G729=OFF \
+    -DWITH_GSM=OFF \
+    -DWITH_ILBC=OFF \
+    -DWITH_QT5=OFF \
+    -DWITH_SPEEX=OFF \
+    -DWITH_ZRTP=OFF \
+    && \
+    make -j`nproc`
+    
 # Build final image
 FROM ubuntu:jammy
 
@@ -65,11 +90,23 @@ RUN apt-get update && \
         netbase \
         ifupdown \
         net-tools \
-        iputils-ping && \
-    apt-get autoremove -y && apt-get autoclean
+        iputils-ping \
+	twinkle-common \
+	libxml2-dev \
+	libmagic-dev \
+	libsndfile1-dev \
+	libreadline-dev \
+	bison \
+	flex \
+	libucommon-dev \
+	libccrtp-dev \
+	libatomic1 && \
+    apt-get autoremove -y && apt-get autoclean && \
+    ln -s /usr/share/twinkle /usr/local/share
 
 COPY --from=builder /UERANSIM/build /UERANSIM/build
 COPY --from=builder /UERANSIM/config /UERANSIM/config
+COPY --from=builder /twinkle/build/src/twinkle-console /UERANSIM/build
 
 # Set the working directory to UERANSIM
 WORKDIR /UERANSIM/build
