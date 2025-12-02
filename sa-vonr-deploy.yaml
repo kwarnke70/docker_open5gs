@@ -467,6 +467,7 @@ services:
     networks:
       default:
         ipv4_address: ${PCSCF_IP}
+      corenet:
 #  smsc:
 #    image: docker_kamailio
 #    container_name: smsc
@@ -519,6 +520,17 @@ networks:
     ipam:
       config:
         - subnet: ${TEST_NETWORK}
+    external: true
+  corenet:
+    name: corenet
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${NF_SUBNET}
+    driver_opts:
+      com.docker.network.bridge.name: corenet
+    external: true
 volumes:
 #  grafana_data:
 #    name: grafana_data

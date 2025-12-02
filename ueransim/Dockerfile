@@ -60,8 +60,8 @@ RUN git clone https://github.com/aligungr/UERANSIM && \
     make -j`nproc`
 
 # Clone and build twinkle
-RUN git clone https://github.com/kwarnke70/twinkle.git && \
-    cd twinkle && git checkout cg && \
+RUN git clone https://github.com/LubosD/twinkle.git && \
+    cd twinkle && \
     mkdir build && cd build && \
     cmake .. \
     -DWITH_AKONADI=OFF \
